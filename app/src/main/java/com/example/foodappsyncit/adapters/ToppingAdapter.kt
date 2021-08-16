@@ -8,7 +8,6 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodappsyncit.R
-import com.example.foodappsyncit.models.CartItem
 import com.example.foodappsyncit.models.Topping
 import com.example.foodappsyncit.models.ToppingWrapper
 import kotlinx.android.synthetic.main.toping_item.view.*

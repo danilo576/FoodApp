@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -131,7 +130,6 @@ class DetailFragment : Fragment() {
                     toppingPrice
                 ) else getTotalSum(args.product!!.price, toppingPrice)
 
-
             if (variantName.isEmpty() && args.product?.type == "configurable") {
                 variantName = args.product!!.variants[0].name
                 variantValue = args.product!!.variants[0].value
@@ -175,7 +173,6 @@ class DetailFragment : Fragment() {
                 it.startAnimation(this)
             }
         }
-
 
         chooseSizeAdapter?.setOnClickListener((object : ChooseSizeAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -263,7 +260,6 @@ class DetailFragment : Fragment() {
 
         btnAddToCart.text = "Add to cart for $${price}"
 
-
     }
 
     private fun hideConfigurableUi(view: View) {
@@ -277,5 +273,4 @@ class DetailFragment : Fragment() {
     private fun getTotalSum(sum1: Double, sum2: Double): Double {
         return ((sum1 + sum2) * 100.0).roundToInt() / 100.0
     }
-
 }

@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodappsyncit.R
-import com.example.foodappsyncit.controllers.CartController
 import com.example.foodappsyncit.utils.UserPreferences
 
 class SplashActivity : AppCompatActivity() {
