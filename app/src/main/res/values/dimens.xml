@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="largeText">24sp</dimen>
+    <dimen name="mediumText">16sp</dimen>
+    <dimen name="smallText">8sp</dimen>
+    <dimen name="largePadding">24dp</dimen>
+    <dimen name="mediumPadding">16dp</dimen>
+    <dimen name="smallPadding">8dp</dimen>
+    <dimen name="largeMargin">24dp</dimen>
+    <dimen name="mediumMargin">16dp</dimen>
+    <dimen name="halfMargin">8dp</dimen>
+    <dimen name="small10Margin">10dp</dimen>
+    <dimen name="small2Margin">2dp</dimen>
+    <dimen name="line">2dp</dimen>
+    <dimen name="desc">12sp</dimen>
+    <dimen name="heading">18sp</dimen>
+    <dimen name="dollarLeft">4dp</dimen>
+    <dimen name="buttonText">14sp</dimen>
+    <dimen name="headingDetail">28sp</dimen>
+    <dimen name="extraMargin">40dp</dimen>
+    <dimen name="marginProfile">20dp</dimen>
+    <dimen name="editMargin">18dp</dimen>
+    <dimen name="logoBackground">220dp</dimen>
+    <dimen name="logoHeightBackground">160dp</dimen>
+    <dimen name="logoHeightBackgroundLogin">210dp</dimen>
+    <dimen name="loginLogo">140dp</dimen>
+    <dimen name="hintText">14sp</dimen>
+    <dimen name="dialogPadding">43dp</dimen>
+    <dimen name="detailPadding">65dp</dimen>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/largePadding"
+    android:paddingVertical="@dimen/dialogPadding">
+
+    <TextView
+        android:id="@+id/tvFirstNameDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="@string/first_name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/heading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etFirstNameDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="@null"
+        android:backgroundTint="@color/icon_color"
+        android:fontFamily="@font/poppins_regular"
+        android:inputType="text"
+        android:textSize="@dimen/mediumText"
+        app:layout_constraintStart_toStartOf="@id/tvFirstNameDialog"
+        app:layout_constraintTop_toBottomOf="@id/tvFirstNameDialog"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/btnSaveDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mediumMargin"
+        android:layout_marginTop="@dimen/largeMargin"
+        android:background="@drawable/custom_button"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:padding="@dimen/mediumPadding"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnCancelDialog"
+        app:layout_constraintTop_toBottomOf="@id/etFirstNameDialog"
+        tools:layout_editor_absoluteX="112dp" />
+
+    <Button
+        android:id="@+id/btnCancelDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/largeMargin"
+        android:layout_marginEnd="@dimen/mediumMargin"
+        android:background="@drawable/guest_button"
+        android:padding="@dimen/mediumPadding"
+        android:text="@string/cancel"
+        android:textColor="@color/icon_color"
+        app:layout_constraintEnd_toStartOf="@id/btnSaveDialog"
+        app:layout_constraintStart_toStartOf="@id/etFirstNameDialog"
+        app:layout_constraintTop_toBottomOf="@id/etFirstNameDialog" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

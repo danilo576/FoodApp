@@ -1,0 +1,23 @@
+[33m9751f8a[m Added functionality for deleting all products in database when user logged out
+[33m6494225[m Topping recyclerview added
+[33m344b090[m Almost done with detail fragment
+[33m66eec32[m Login fragment with token
+[33mbb234c0[m Added registration form and login fragment
+[33m305413f[m Added splash activity and input validations
+[33m9c9cfff[m Added register post
+[33m6f9e467[m Finished more fragment
+[33m1eb6daa[m Added cart fragment and update swipe to delete
+[33mba3170c[m Added Room library to persist favorite list of products
+[33m3bb2d98[m Better organized navigations between fragments
+[33m6fa98a7[m Added cart functionality
+[33me6fe658[m Added cart detail
+[33m255948b[m Refactor action and status bar
+[33md690950[m Add profile
+[33mbd4144d[m Solved problem with Category Item
+[33m19e7bef[m Update Menu Fragment
+[33m69cd3ff[m Added detail fragment
+[33m60284c2[m Added Product ViewModel and make api request to fetch all products
+[33m31f7d02[m Create repository, data class and set retrofit instance
+[33m3dd891d[m Added fragments and nav graph
+[33m2b66c19[m Added vcs.xml
+[33m0f2aaa7[m My first commit

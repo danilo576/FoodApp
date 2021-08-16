@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.DetailFragment">
+
+    <Button
+        android:id="@+id/btnAddToCart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/mediumMargin"
+        android:layout_marginTop="@dimen/mediumMargin"
+        android:layout_marginBottom="@dimen/small10Margin"
+        android:background="@drawable/custom_button"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/mediumText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/detailPadding">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivPizzaDetail"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="H, 1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvHeadingDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/mediumMargin"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/headingDetail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivPizzaDetail" />
+
+            <TextView
+                android:id="@+id/tvChooseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/description"
+                android:textSize="@dimen/desc"
+                app:layout_constraintStart_toStartOf="@id/tvHeadingDetail"
+                app:layout_constraintTop_toBottomOf="@id/tvHeadingDetail" />
+
+            <View
+                android:id="@+id/smallDesh"
+                android:layout_width="@dimen/small10Margin"
+                android:layout_height="@dimen/small2Margin"
+                android:background="@color/line"
+                app:layout_constraintBottom_toBottomOf="@id/tvChooseName"
+                app:layout_constraintStart_toEndOf="@id/tvChooseName"
+                app:layout_constraintTop_toTopOf="@id/tvChooseName" />
+
+            <TextView
+                android:id="@+id/tvChooseValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/description"
+                android:textSize="@dimen/desc"
+                app:layout_constraintStart_toEndOf="@id/smallDesh"
+                app:layout_constraintTop_toTopOf="@id/tvChooseName" />
+
+            <TextView
+                android:id="@+id/tvDescriptionDetail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small10Margin"
+                android:layout_marginEnd="@dimen/small10Margin"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/description"
+                android:textSize="@dimen/desc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tvHeadingDetail"
+                app:layout_constraintTop_toBottomOf="@id/tvChooseName" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small2Margin"
+                android:layout_marginTop="@dimen/small10Margin"
+                android:background="@color/line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDescriptionDetail" />
+
+            <TextView
+                android:id="@+id/tvChooseSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/choose_size"
+                android:textColor="@color/black"
+                android:textSize="@dimen/heading"
+                app:layout_constraintStart_toStartOf="@id/tvHeadingDetail"
+                app:layout_constraintTop_toBottomOf="@id/line1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewChooseSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvChooseSize" />
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/small2Margin"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:background="@color/line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewChooseSize" />
+
+            <ImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@null"
+                android:padding="@dimen/mediumPadding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivMarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:contentDescription="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAddToPizza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/add_to_pizza"
+                android:textColor="@color/black"
+                android:textSize="@dimen/heading"
+                app:layout_constraintStart_toStartOf="@id/tvHeadingDetail"
+                app:layout_constraintTop_toBottomOf="@id/line2" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/tvAddToPizza"
+                app:layout_constraintTop_toBottomOf="@id/tvAddToPizza" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

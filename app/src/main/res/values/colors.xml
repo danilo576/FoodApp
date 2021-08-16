@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#1FA5E1</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="icon_color">#1FA5E1</color>
+    <color name="description">#AAAAAA</color>
+    <color name="normal_white">#FFFFFF</color>
+    <color name="rounded_border">#EBEBEB</color>
+    <color name="profile">#999999</color>
+    <color name="line">#D4D4D4</color>
+    <color name="gradient1">#7586F5</color>
+    <color name="gradient2">#1FA5E1</color>
+    <color name="black_transparent">#AD000000</color>
+    <color name="hintColor">#999999</color>
+    <color name="sign_in_color">#474747</color>
+    <color name="forgot_password">#707070</color>
+    <color name="guest_color">#1FA5E1</color>
+</resources>

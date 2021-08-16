@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cartParentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CartFragment">
+
+    <TextView
+        android:id="@+id/emptyCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="@string/cart_is_empty"
+        android:textSize="@dimen/largeText"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnCheckout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/largeMargin"
+        android:layout_marginTop="@dimen/small10Margin"
+        android:layout_marginBottom="@dimen/small10Margin"
+        android:background="@drawable/custom_button"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:padding="@dimen/smallPadding"
+        android:text="@string/checkout"
+        android:textColor="@color/white"
+        android:textSize="@dimen/mediumText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/dialogPadding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/parentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/largePadding">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/totals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/largeMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/totals"
+                android:textColor="@color/black"
+                android:textSize="@dimen/largeText"
+                app:layout_constraintStart_toStartOf="@id/recyclerViewCart"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewCart" />
+
+            <TextView
+                android:id="@+id/subTotals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:text="@string/sub_totals"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintStart_toStartOf="@id/totals"
+                app:layout_constraintTop_toBottomOf="@id/totals" />
+
+            <TextView
+                android:id="@+id/sumOfSubTotals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintEnd_toEndOf="@id/recyclerViewCart"
+                app:layout_constraintTop_toBottomOf="@id/totals" />
+
+            <View
+                android:id="@+id/forDelete"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:background="@color/line"
+                app:layout_constraintBottom_toBottomOf="@id/subTotals"
+                app:layout_constraintEnd_toStartOf="@id/sumOfSubTotals"
+                app:layout_constraintStart_toEndOf="@id/subTotals" />
+
+            <TextView
+                android:id="@+id/discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:text="@string/discount"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintStart_toStartOf="@id/totals"
+                app:layout_constraintTop_toBottomOf="@id/subTotals" />
+
+            <TextView
+                android:id="@+id/sumOfDiscount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintEnd_toEndOf="@id/recyclerViewCart"
+                app:layout_constraintTop_toBottomOf="@id/subTotals" />
+
+
+            <View
+                android:id="@+id/forDelete2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:background="@color/line"
+                app:layout_constraintBottom_toBottomOf="@id/discount"
+                app:layout_constraintEnd_toStartOf="@id/sumOfDiscount"
+                app:layout_constraintStart_toEndOf="@id/discount" />
+
+            <TextView
+                android:id="@+id/orderTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:text="@string/order_total"
+                android:textColor="@color/icon_color"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintStart_toStartOf="@id/totals"
+                app:layout_constraintTop_toBottomOf="@id/discount" />
+
+            <TextView
+                android:id="@+id/sumOfTotalOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textColor="@color/icon_color"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintEnd_toEndOf="@id/recyclerViewCart"
+                app:layout_constraintTop_toBottomOf="@id/discount" />
+
+            <View
+                android:id="@+id/forDelete3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line"
+                android:layout_marginTop="@dimen/mediumMargin"
+                android:background="@color/line"
+                app:layout_constraintBottom_toBottomOf="@id/orderTotal"
+                app:layout_constraintEnd_toStartOf="@id/sumOfTotalOrder"
+                app:layout_constraintStart_toEndOf="@id/orderTotal" />
+
+            <Button
+                android:id="@+id/btnClearProducts"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/largeMargin"
+                android:background="@drawable/custom_button"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/clear_all_products"
+                android:textColor="@color/white"
+                android:textSize="@dimen/mediumText"
+                app:layout_constraintEnd_toEndOf="@id/recyclerViewCart"
+                app:layout_constraintStart_toStartOf="@id/recyclerViewCart"
+                app:layout_constraintTop_toBottomOf="@id/orderTotal" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
