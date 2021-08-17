@@ -13,7 +13,9 @@ class ApiClient(
     private val foodAppService: FoodAppService
 ) {
     suspend fun getCategories(): Response<GetCategoriesResponse> = foodAppService.getCategories()
+
     suspend fun addUser(user: User): Response<UserRegistryResponse> = foodAppService.addUser(user)
+
     suspend fun loginUser(user: LoginRequest): Response<LoginResponse> =
         foodAppService.loginUser(user)
 

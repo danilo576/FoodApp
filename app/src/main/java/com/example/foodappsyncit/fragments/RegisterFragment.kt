@@ -77,6 +77,7 @@ class RegisterFragment : Fragment() {
                     view.etConfirmPasswordRegister.text.toString()
                 )
             ) {
+
                 val firstName = etFirstName.text.toString()
                 val lastName = etLastName.text.toString()
                 val email = etEmailRegister.text.toString()
@@ -101,24 +102,32 @@ class RegisterFragment : Fragment() {
                     status
                 )
 
-                userRegisterViewModel.addUser(user)
-                userRegisterViewModel.registryResponse.observe(viewLifecycleOwner) { response ->
-                    if (!response.isSuccessful) {
-                        ValidationUtil.showToast(
-                            requireContext(),
-                            "The email has already been take!"
-                        )
-                        return@observe
-                    }
-                    (activity as AuthActivity).replaceFragment(LoginFragment())
-                    Toast.makeText(requireContext(), "Successfully registered", Toast.LENGTH_SHORT)
-                        .show()
-                    requireActivity().finish()
-                }
+                addUser(user)
+                setupUserRegistryObserver()
+
             }
         }
 
         return view
     }
 
+    private fun addUser(user: User) {
+        userRegisterViewModel.addUser(user)
+    }
+
+    private fun setupUserRegistryObserver() {
+        userRegisterViewModel.registryResponse.observe(viewLifecycleOwner) { response ->
+            if (!response.isSuccessful) {
+                ValidationUtil.showToast(
+                    requireContext(),
+                    "The email has already been take!"
+                )
+                return@observe
+            }
+            (activity as AuthActivity).replaceFragment(LoginFragment())
+            Toast.makeText(requireContext(), "Successfully registered", Toast.LENGTH_SHORT)
+                .show()
+            requireActivity().finish()
+        }
+    }
 }

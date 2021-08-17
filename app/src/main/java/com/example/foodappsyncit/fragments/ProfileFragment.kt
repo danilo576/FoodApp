@@ -29,6 +29,7 @@ class ProfileFragment : Fragment() {
     private var firstName: String? = null
     private var lastName: String? = null
     private var phoneNumber: String? = null
+    private lateinit var favoriteProductAdapter: FavoriteProductsAdapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -37,28 +38,65 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        userViewModel = ViewModelProvider(this).get(UserLoginViewModel::class.java)
+        setupViewModels()
 
-        val adapter = FavoriteProductsAdapter()
+        setupFavoriteProductsRecyclerView(view)
+
+        setupProductObserver(view)
+
+        findUserByToken()
+
+        setupLoggedInUserObserver(view)
+
+        setupUpdateUserObserver(view)
+
+        view.btnUpdateFirstName.setOnClickListener {
+            updateUser("First Name", firstName)
+        }
+
+        view.btnUpdateLastName.setOnClickListener {
+            updateUser("Last Name", lastName)
+        }
+
+        view.btnUpdatePhoneNumber.setOnClickListener {
+            updateUser("Phone Number", phoneNumber)
+        }
+
+        return view
+    }
+
+    private fun setupFavoriteProductsRecyclerView(view: View) {
+        favoriteProductAdapter = FavoriteProductsAdapter()
+        view.recyclerViewProfile.apply {
+            adapter = favoriteProductAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun setupProductObserver(view: View) {
         productViewModel.readAllProducts.observe(viewLifecycleOwner, {
-            adapter.setData(it)
+            favoriteProductAdapter.setData(it)
             if (it.isEmpty()) {
                 view.tvMyFavorites.visibility = View.GONE
             }
         })
+    }
 
-        val recyclerView = view.recyclerViewProfile
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    private fun setupViewModels() {
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserLoginViewModel::class.java)
+    }
 
+    private fun findUserByToken() {
         UserPreferences.retrieveToken(requireContext(), "token")?.let {
             userViewModel.getLoggedInUser(
                 "Bearer $it"
             )
         }
+    }
 
+    private fun setupLoggedInUserObserver(view: View) {
         userViewModel.loggedInUser.observe(viewLifecycleOwner) {
             if (it.isSuccessful) {
                 view.tvFirstName.text = it.body()?.user?.firstName
@@ -72,7 +110,9 @@ class ProfileFragment : Fragment() {
                 ValidationUtil.showToast(requireContext(), "Something went wrong")
             }
         }
+    }
 
+    private fun setupUpdateUserObserver(view: View) {
         userViewModel.updatedUser.observe(viewLifecycleOwner) {
             if (it.isSuccessful) {
                 Toast.makeText(requireContext(), "Successfully updated", Toast.LENGTH_SHORT).show()
@@ -90,96 +130,41 @@ class ProfileFragment : Fragment() {
                 ).show()
             }
         }
+    }
 
-        view.ivEdit1.setOnClickListener {
+    private fun updateUser(heading: String, etHeading: String?) {
+        val view = View.inflate(requireContext(), R.layout.custom_dialog, null)
+        view.tvHeadingDialog.text = heading
+        view.etHeadingDialog.setText(etHeading)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(view)
+        val dialog = builder.create()
+        dialog.show()
+        val lp = dialog.window!!.attributes
+        lp.dimAmount = 0.7f
+        dialog.window!!.attributes = lp
+        dialog.window!!.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
 
-            val view = View.inflate(requireContext(), R.layout.custom_dialog, null)
-            view.tvFirstNameDialog.text = "First Name"
-            view.etFirstNameDialog.setText(firstName)
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setView(view)
-            val dialog = builder.create()
-            dialog.show()
-            val lp = dialog.window!!.attributes
-            lp.dimAmount = 0.7f
-            dialog.window!!.attributes = lp
-            dialog.window!!.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        view.btnSaveDialog.setOnClickListener {
+            UserPreferences.retrieveToken(requireContext(), "token")?.let {
 
-            view.btnSaveDialog.setOnClickListener {
-                UserPreferences.retrieveToken(requireContext(), "token")?.let {
-
-                    userViewModel.updateUser(
-                        "Bearer $it",
-                        UserUpdate(firstName = view.etFirstNameDialog.text.toString())
-                    )
-                    dialog.dismiss()
-                }
-            }
-
-            view.btnCancelDialog.setOnClickListener {
+                userViewModel.updateUser(
+                    "Bearer $it",
+                    when (heading) {
+                        "First Name" -> UserUpdate(firstName = view.etHeadingDialog.text.toString())
+                        "Last Name" -> UserUpdate(
+                            lastName = view.etHeadingDialog.text.toString()
+                        )
+                        else -> UserUpdate(phoneNumber = view.etHeadingDialog.text.toString())
+                    }
+                )
                 dialog.dismiss()
             }
         }
 
-        view.ivEdit2.setOnClickListener {
-            val view = View.inflate(requireContext(), R.layout.custom_dialog, null)
-            view.tvFirstNameDialog.text = "Last Name"
-            view.etFirstNameDialog.setText(lastName)
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setView(view)
-            val dialog = builder.create()
-            dialog.show()
-            val lp = dialog.window!!.attributes
-            lp.dimAmount = 0.7f
-            dialog.window!!.attributes = lp
-            dialog.window!!.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
-            view.btnSaveDialog.setOnClickListener {
-                UserPreferences.retrieveToken(requireContext(), "token")?.let {
-
-                    userViewModel.updateUser(
-                        "Bearer $it",
-                        UserUpdate(lastName = view.etFirstNameDialog.text.toString())
-                    )
-                    dialog.dismiss()
-                }
-            }
-
-            view.btnCancelDialog.setOnClickListener {
-                dialog.dismiss()
-            }
+        view.btnCancelDialog.setOnClickListener {
+            dialog.dismiss()
         }
-
-        view.ivEdit4.setOnClickListener {
-            val view = View.inflate(requireContext(), R.layout.custom_dialog, null)
-            view.tvFirstNameDialog.text = "Phone Number"
-            view.etFirstNameDialog.setText(phoneNumber)
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setView(view)
-            val dialog = builder.create()
-            dialog.show()
-            val lp = dialog.window!!.attributes
-            lp.dimAmount = 0.7f
-            dialog.window!!.attributes = lp
-            dialog.window!!.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
-            view.btnSaveDialog.setOnClickListener {
-                UserPreferences.retrieveToken(requireContext(), "token")?.let {
-
-                    userViewModel.updateUser(
-                        "Bearer $it",
-                        UserUpdate(phoneNumber = view.etFirstNameDialog.text.toString())
-                    )
-                    dialog.dismiss()
-                }
-            }
-
-            view.btnCancelDialog.setOnClickListener {
-                dialog.dismiss()
-            }
-        }
-
-        return view
     }
 
 }

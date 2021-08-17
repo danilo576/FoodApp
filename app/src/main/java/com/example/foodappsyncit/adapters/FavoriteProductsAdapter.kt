@@ -19,6 +19,30 @@ class FavoriteProductsAdapter :
 
     inner class FavoriteProductsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        @SuppressLint("SetTextI18n")
+        fun bind(product: Product) {
+            itemView.tvHeading.text = product.name
+            itemView.tvPrice.text = "$${product.price}"
+            Picasso.get().load(product.image.replace("http:", "https:")).resize(300, 300)
+                .into(itemView.ivPicture)
+
+            val nameOfMarker = when (product.markers.firstOrNull()) {
+                "Hot" -> R.drawable.ic_hot
+                "Veg" -> R.drawable.ic_veg
+                else -> 0
+            }
+            itemView.ivMarker.setImageResource(nameOfMarker)
+
+            itemView.rowLayout.setOnClickListener {
+                val action =
+                    ProfileFragmentDirections.actionProfileFragmentToDetailFragment(
+                        product,
+                        null,
+                        null
+                    )
+                itemView.findNavController().navigate(action)
+            }
+        }
     }
 
     override fun onCreateViewHolder(
@@ -32,33 +56,11 @@ class FavoriteProductsAdapter :
 
     override fun getItemCount(): Int = favoriteList.size
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: FavoriteProductsAdapter.FavoriteProductsViewHolder,
         position: Int
     ) {
-        val currentProduct = favoriteList[position]
-        holder.itemView.tvHeading.text = currentProduct.name
-        holder.itemView.tvPrice.text = "$${currentProduct.price}"
-        Picasso.get().load(currentProduct.image.replace("http:", "https:")).resize(300, 300)
-            .into(holder.itemView.ivPicture)
-
-        val nameOfMarker = when (currentProduct.markers.firstOrNull()) {
-            "Hot" -> R.drawable.ic_hot
-            "Veg" -> R.drawable.ic_veg
-            else -> 0
-        }
-        holder.itemView.ivMarker.setImageResource(nameOfMarker)
-
-        holder.itemView.rowLayout.setOnClickListener {
-            val action =
-                ProfileFragmentDirections.actionProfileFragmentToDetailFragment(
-                    currentProduct,
-                    null,
-                    null
-                )
-            holder.itemView.findNavController().navigate(action)
-        }
+        holder.bind(favoriteList[position])
     }
 
     @SuppressLint("NotifyDataSetChanged")

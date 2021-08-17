@@ -107,11 +107,11 @@ object ValidationUtil {
     }
 
     fun areEqual(context: Context, password: String?, confirmPassword: String?): Boolean {
-        if (TextUtils.equals(password, confirmPassword)) {
-            return true
+        return if (TextUtils.equals(password, confirmPassword)) {
+            true
         } else {
             showToast(context, "Passwords are not equals")
-            return false
+            false
         }
     }
 }

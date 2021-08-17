@@ -34,27 +34,10 @@ class LoginFragment : Fragment() {
             ) {
                 val email = view.etEmail.text.toString()
                 val password = view.etPassword.text.toString()
-                val loginUser = LoginRequest(email, password)
-                viewModel.loginUser(loginUser)
-                viewModel.loginResponse.observe(viewLifecycleOwner) {
-                    if (it != null) {
-                        if (it.isSuccessful) {
-                            UserPreferences.saveToken(
-                                requireContext(),
-                                "token", it.body()?.token
-                            )
-                            Intent(activity, MainActivity::class.java).apply {
-                                startActivity(this)
-                            }
-                            activity?.finish()
-                        }
-                        if (it.code() == 401) {
-                            ValidationUtil.showToast(requireContext(), "Wrong email or password")
-                        }
-                        viewModel.loginResponse.value = null
-                    }
+                val user = LoginRequest(email, password)
 
-                }
+                loginUser(user)
+                setupObserver()
             }
         }
 
@@ -71,6 +54,31 @@ class LoginFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun loginUser(user: LoginRequest) {
+        viewModel.loginUser(user)
+    }
+
+    private fun setupObserver() {
+        viewModel.loginResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                if (response.isSuccessful) {
+                    UserPreferences.saveToken(
+                        requireContext(),
+                        "token", response.body()?.token
+                    )
+                    Intent(activity, MainActivity::class.java).also {
+                        startActivity(it)
+                    }
+                    activity?.finish()
+                }
+                if (response.code() == 401) {
+                    ValidationUtil.showToast(requireContext(), "Wrong email or password")
+                }
+                viewModel.loginResponse.value = null
+            }
+        }
     }
 
 }

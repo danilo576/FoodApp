@@ -35,39 +35,52 @@ class MoreFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_more, container, false)
 
         if ((activity as MainActivity).intent.getStringExtra("Guest") != null) {
-            view.ivLogout.setImageResource(R.drawable.ic_login)
-            view.tvLogout.text = "Login"
-            view.logoutLayout.setOnClickListener {
-                Intent(requireContext(), AuthActivity::class.java).also {
-                    startActivity(it)
-                }
-            }
+            setupLogin(view)
         } else {
-            view.logoutLayout.setOnClickListener {
-                UserPreferences.retrieveToken(requireContext(), "token")?.let {
-                    userViewModel.logoutUser("Bearer $it")
-                }
-
-                userViewModel.logoutUser.observe(viewLifecycleOwner) {
-                    if (it.isSuccessful) {
-                        Intent(activity, AuthActivity::class.java).apply {
-                            startActivity(this)
-                            activity?.finish()
-                        }
-                        productViewModel.deleteAllProducts()
-                        CartController.cartList.clear()
-                        requireContext().getSharedPreferences("myPrefs", 0).edit().clear().apply()
-                    } else {
-                        ValidationUtil.showToast(
-                            requireContext(),
-                            "It seems like something went wrong with token"
-                        )
-                    }
-                }
-            }
+            setupLogout(view)
         }
 
         return view
+    }
+
+    private fun setupLogin(view: View) {
+        view.ivLogout.setImageResource(R.drawable.ic_login)
+        view.tvLogout.text = "Login"
+        view.logoutLayout.setOnClickListener {
+            Intent(requireContext(), AuthActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+    }
+
+    private fun setupLogout(view: View) {
+        view.logoutLayout.setOnClickListener {
+
+            UserPreferences.retrieveToken(requireContext(), "token")?.let {
+                userViewModel.logoutUser("Bearer $it")
+            }
+
+            setupLogoutObserver()
+        }
+    }
+
+    private fun setupLogoutObserver() {
+        userViewModel.logoutUser.observe(viewLifecycleOwner) {
+            if (it.isSuccessful) {
+                Intent(activity, AuthActivity::class.java).apply {
+                    startActivity(this)
+                    activity?.finish()
+                }
+                productViewModel.deleteAllProducts()
+                CartController.cartList.clear()
+                requireContext().getSharedPreferences("myPrefs", 0).edit().clear().apply()
+            } else {
+                ValidationUtil.showToast(
+                    requireContext(),
+                    "It seems like something went wrong with token"
+                )
+            }
+        }
     }
 
 }

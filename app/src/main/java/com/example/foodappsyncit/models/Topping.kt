@@ -5,8 +5,3 @@ data class Topping(
     val type: String = "",
     val price: Double = 0.00
 )
-
-data class ToppingWrapper(
-    val topping: Topping,
-    val isChecked: Boolean = false
-)

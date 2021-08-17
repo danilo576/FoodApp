@@ -100,18 +100,11 @@ class DetailFragment : Fragment() {
         }
         view.ivMarker.setImageResource(nameOfMarker)
 
-        productViewModel.readAllProducts.observe(viewLifecycleOwner, { response ->
-            if (response.contains(args.product)) {
-                view.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
-            } else {
-                view.ivFavorite.setImageResource(R.drawable.ic_favorite_outline)
-            }
-            favoriteList = response as ArrayList<Product>
-        })
-
         if ((activity as MainActivity).intent.getStringExtra("Guest") != null) {
             view.ivFavorite.visibility = View.GONE
         }
+
+        setupProductObserver(view)
 
         view.ivFavorite.setOnClickListener {
             if (favoriteList.contains(args.product)) {
@@ -272,5 +265,16 @@ class DetailFragment : Fragment() {
 
     private fun getTotalSum(sum1: Double, sum2: Double): Double {
         return ((sum1 + sum2) * 100.0).roundToInt() / 100.0
+    }
+
+    private fun setupProductObserver(view: View) {
+        productViewModel.readAllProducts.observe(viewLifecycleOwner, { response ->
+            if (response.contains(args.product)) {
+                view.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
+            } else {
+                view.ivFavorite.setImageResource(R.drawable.ic_favorite_outline)
+            }
+            favoriteList = response as ArrayList<Product>
+        })
     }
 }

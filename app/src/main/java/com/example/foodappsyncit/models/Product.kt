@@ -2,12 +2,10 @@ package com.example.foodappsyncit.models
 
 import android.os.Parcelable
 import androidx.room.*
-import com.example.foodappsyncit.database.ConvertersForRoom
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "product_table")
-@TypeConverters(ConvertersForRoom::class)
 data class Product(
     @PrimaryKey(autoGenerate = true)
     val id: Int,

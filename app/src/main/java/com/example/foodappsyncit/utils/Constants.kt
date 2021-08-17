@@ -10,5 +10,6 @@ class Constants {
         const val LOGGED_URL = "/api/user"
         const val LOGOUT_URL = "/api/logout"
         const val UPDATE_USER_URL = "/api/user/update"
+        const val PREFS_NAME = "myPrefs"
     }
 }

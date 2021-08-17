@@ -8,18 +8,17 @@
     android:paddingVertical="@dimen/dialogPadding">
 
     <TextView
-        android:id="@+id/tvFirstNameDialog"
+        android:id="@+id/tvHeadingDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_semi_bold"
-        android:text="@string/first_name"
         android:textColor="@color/black"
         android:textSize="@dimen/heading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etFirstNameDialog"
+        android:id="@+id/etHeadingDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="@null"
@@ -27,8 +26,8 @@
         android:fontFamily="@font/poppins_regular"
         android:inputType="text"
         android:textSize="@dimen/mediumText"
-        app:layout_constraintStart_toStartOf="@id/tvFirstNameDialog"
-        app:layout_constraintTop_toBottomOf="@id/tvFirstNameDialog"
+        app:layout_constraintStart_toStartOf="@id/tvHeadingDialog"
+        app:layout_constraintTop_toBottomOf="@id/tvHeadingDialog"
         tools:ignore="LabelFor" />
 
     <Button
@@ -44,7 +43,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btnCancelDialog"
-        app:layout_constraintTop_toBottomOf="@id/etFirstNameDialog"
+        app:layout_constraintTop_toBottomOf="@id/etHeadingDialog"
         tools:layout_editor_absoluteX="112dp" />
 
     <Button
@@ -58,8 +57,8 @@
         android:text="@string/cancel"
         android:textColor="@color/icon_color"
         app:layout_constraintEnd_toStartOf="@id/btnSaveDialog"
-        app:layout_constraintStart_toStartOf="@id/etFirstNameDialog"
-        app:layout_constraintTop_toBottomOf="@id/etFirstNameDialog" />
+        app:layout_constraintStart_toStartOf="@id/etHeadingDialog"
+        app:layout_constraintTop_toBottomOf="@id/etHeadingDialog" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -93,9 +93,13 @@ class CartFragment : Fragment() {
         }
 
         cartAdapter.setOnClickListener((object : CartAdapter.OnCartItemClickListener {
-            override fun onCartItemClick(cartItem: CartItem) {
+            override fun onCartItemClick(cartProduct: CartItem) {
                 findNavController().navigate(
-                    CartFragmentDirections.actionCartFragmentToDetailFragment(cartItem.product, null, cartItem)
+                    CartFragmentDirections.actionCartFragmentToDetailFragment(
+                        cartProduct.product,
+                        null,
+                        cartProduct
+                    )
                 )
             }
         }))

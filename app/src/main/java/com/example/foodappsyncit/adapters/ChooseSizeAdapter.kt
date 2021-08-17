@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.choose_size_item.view.*
 
 class ChooseSizeAdapter(
     private val variants: List<Variant>,
-    private val variant: Variant?
+    variant: Variant?
 ) :
     RecyclerView.Adapter<ChooseSizeAdapter.ChooseSizeViewHolder>() {
 

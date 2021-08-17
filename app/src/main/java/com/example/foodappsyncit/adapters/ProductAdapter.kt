@@ -64,7 +64,6 @@ class ProductAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 else -> 0
             }
             marker.setImageResource(nameOfMarker)
-
         }
     }
 }
