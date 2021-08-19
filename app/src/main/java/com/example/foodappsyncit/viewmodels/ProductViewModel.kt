@@ -9,7 +9,7 @@ import com.example.foodappsyncit.repository.ProductRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class ProductViewModel() : ViewModel() {
+class ProductViewModel : ViewModel() {
 
     private val repository = ProductRepository()
     var readAllFavoriteProducts: MutableLiveData<Response<FavoriteProductsResponse>> =
@@ -17,23 +17,23 @@ class ProductViewModel() : ViewModel() {
     var addFavoriteProduct: MutableLiveData<Response<MessageResponse>> = MutableLiveData()
     var deleteFavoriteProduct: MutableLiveData<Response<MessageResponse>> = MutableLiveData()
 
-    fun readAllFavorites(token: String) {
+    fun readAllFavorites() {
         viewModelScope.launch {
-            val response = repository.readAllFavorites(token)
+            val response = repository.readAllFavorites()
             readAllFavoriteProducts.value = response
         }
     }
 
-    fun addProductToFavorites(token: String, productId: Int) {
+    fun addProductToFavorites(productId: Int) {
         viewModelScope.launch {
-            val response = repository.addProductToFavorites(token, productId)
+            val response = repository.addProductToFavorites(productId)
             addFavoriteProduct.value = response
         }
     }
 
-    fun deleteProductFromFavorites(token: String, productId: Int) {
+    fun deleteProductFromFavorites(productId: Int) {
         viewModelScope.launch {
-            val response = repository.deleteProductFromFavorites(token, productId)
+            val response = repository.deleteProductFromFavorites(productId)
             deleteFavoriteProduct.value = response
         }
     }

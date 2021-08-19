@@ -27,23 +27,23 @@ class UserLoginViewModel() : ViewModel() {
         }
     }
 
-    fun getLoggedInUser(token: String) {
+    fun getLoggedInUser() {
         viewModelScope.launch {
-            val response = repository.getLoggedInUser(token)
+            val response = repository.getLoggedInUser()
             loggedInUser.value = response
         }
     }
 
-    fun logoutUser(token: String) {
+    fun logoutUser() {
         viewModelScope.launch {
-            val response = repository.logoutUser(token)
+            val response = repository.logoutUser()
             logoutUser.value = response
         }
     }
 
-    fun updateUser(token: String, user: UserUpdate) {
+    fun updateUser(user: UserUpdate) {
         viewModelScope.launch {
-            val response = repository.updateUser(token, user)
+            val response = repository.updateUser(user)
             updatedUser.value = response
         }
     }

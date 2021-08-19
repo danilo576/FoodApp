@@ -13,9 +13,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        UserPreferences.initPreferences(this)
+
         Handler(Looper.getMainLooper()).postDelayed({
 
-            if (UserPreferences.retrieveToken(this@SplashActivity, "token") != null) {
+            if (UserPreferences.retrieveToken("token") != null) {
                 Intent(this, MainActivity::class.java).also {
                     startActivity(it)
                     this.finish()

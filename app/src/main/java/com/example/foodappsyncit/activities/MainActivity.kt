@@ -67,8 +67,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupProductObserver() {
 
-        UserPreferences.retrieveToken(this, "token")?.let {
-            productViewModel.readAllFavorites("Bearer $it")
+        UserPreferences.retrieveToken("token")?.let {
+            productViewModel.readAllFavorites()
         }
 
         productViewModel.readAllFavoriteProducts.observe(this) { response ->

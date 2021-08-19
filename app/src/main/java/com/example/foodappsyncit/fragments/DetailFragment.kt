@@ -217,9 +217,8 @@ class DetailFragment : Fragment() {
     }
 
     private fun addProductToFavorites(product: Product) {
-        UserPreferences.retrieveToken(requireContext(), "token")?.let {
+        UserPreferences.retrieveToken("token")?.let {
             (activity as MainActivity).productViewModel.addProductToFavorites(
-                "Bearer $it",
                 product.id
             )
         }
@@ -232,9 +231,8 @@ class DetailFragment : Fragment() {
     }
 
     private fun deleteProductFromFavorites(product: Product) {
-        UserPreferences.retrieveToken(requireContext(), "token")?.let {
+        UserPreferences.retrieveToken("token")?.let {
             (activity as MainActivity).productViewModel.deleteProductFromFavorites(
-                "Bearer $it",
                 product.id
             )
         }

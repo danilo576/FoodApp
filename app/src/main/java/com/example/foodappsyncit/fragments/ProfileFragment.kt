@@ -85,10 +85,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun findUserByToken() {
-        UserPreferences.retrieveToken(requireContext(), "token")?.let {
-            userViewModel.getLoggedInUser(
-                "Bearer $it"
-            )
+        UserPreferences.retrieveToken("token")?.let {
+            userViewModel.getLoggedInUser()
         }
     }
 
@@ -142,10 +140,9 @@ class ProfileFragment : Fragment() {
         dialog.window!!.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
 
         view.btnSaveDialog.setOnClickListener {
-            UserPreferences.retrieveToken(requireContext(), "token")?.let {
+            UserPreferences.retrieveToken("token")?.let {
 
                 userViewModel.updateUser(
-                    "Bearer $it",
                     when (heading) {
                         "First Name" -> UserUpdate(firstName = view.etHeadingDialog.text.toString())
                         "Last Name" -> UserUpdate(

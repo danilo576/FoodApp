@@ -13,7 +13,7 @@ import retrofit2.Response
 class SharedRepository {
 
     suspend fun getCategories(): GetCategoriesResponse? {
-        val request = NetworkLayer.apiClient.getCategories()
+        val request = NetworkLayer.apiUnAuthorizedClient.getCategories()
 
         if (request.isSuccessful) {
             return request.body()!!
@@ -22,20 +22,19 @@ class SharedRepository {
     }
 
     suspend fun addUser(user: User): Response<UserRegistryResponse> =
-        NetworkLayer.apiClient.addUser(user)
+        NetworkLayer.apiUnAuthorizedClient.addUser(user)
 
     suspend fun loginUser(user: LoginRequest): Response<LoginResponse> =
-        NetworkLayer.apiClient.loginUser(user)
+        NetworkLayer.apiUnAuthorizedClient.loginUser(user)
 
-    suspend fun getLoggedInUser(token: String): Response<UserRegistryResponse> =
-        NetworkLayer.apiClient.getLoggedInUser(token)
+    suspend fun getLoggedInUser(): Response<UserRegistryResponse> =
+        NetworkLayer.apiAuthorizedClient.getLoggedInUser()
 
-    suspend fun logoutUser(token: String): Response<MessageResponse> =
-        NetworkLayer.apiClient.logoutUser(token)
+    suspend fun logoutUser(): Response<MessageResponse> =
+        NetworkLayer.apiAuthorizedClient.logoutUser()
 
     suspend fun updateUser(
-        token: String,
         user: UserUpdate
     ): Response<LoginResponse> =
-        NetworkLayer.apiClient.updateUser(token, user)
+        NetworkLayer.apiAuthorizedClient.updateUser(user)
 }

@@ -64,10 +64,7 @@ class LoginFragment : Fragment() {
         viewModel.loginResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 if (response.isSuccessful) {
-                    UserPreferences.saveToken(
-                        requireContext(),
-                        "token", response.body()?.token
-                    )
+                    UserPreferences.saveToken("token", response.body()?.token)
                     Intent(activity, MainActivity::class.java).also {
                         startActivity(it)
                     }

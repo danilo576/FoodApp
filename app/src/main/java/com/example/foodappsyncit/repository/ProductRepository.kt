@@ -7,18 +7,16 @@ import retrofit2.Response
 
 class ProductRepository {
 
-    suspend fun readAllFavorites(token: String): Response<FavoriteProductsResponse> =
-        NetworkLayer.apiClient.readAllFavorites(token)
+    suspend fun readAllFavorites(): Response<FavoriteProductsResponse> =
+        NetworkLayer.apiAuthorizedClient.readAllFavorites()
 
     suspend fun addProductToFavorites(
-        token: String,
         productId: Int
     ): Response<MessageResponse> =
-        NetworkLayer.apiClient.addProductToFavorites(token, productId)
+        NetworkLayer.apiAuthorizedClient.addProductToFavorites(productId)
 
     suspend fun deleteProductFromFavorites(
-        token: String,
         productId: Int
     ): Response<MessageResponse> =
-        NetworkLayer.apiClient.deleteProductFromFavorites(token, productId)
+        NetworkLayer.apiAuthorizedClient.deleteProductFromFavorites(productId)
 }

@@ -53,8 +53,8 @@ class MoreFragment : Fragment() {
     private fun setupLogout(view: View) {
         view.logoutLayout.setOnClickListener {
 
-            UserPreferences.retrieveToken(requireContext(), "token")?.let {
-                userViewModel.logoutUser("Bearer $it")
+            UserPreferences.retrieveToken("token")?.let {
+                userViewModel.logoutUser()
             }
 
             setupLogoutObserver()
