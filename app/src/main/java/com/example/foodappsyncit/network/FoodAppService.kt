@@ -3,11 +3,11 @@ package com.example.foodappsyncit.network
 import com.example.foodappsyncit.models.User
 import com.example.foodappsyncit.network.requests.LoginRequest
 import com.example.foodappsyncit.network.requests.UserUpdate
-import com.example.foodappsyncit.network.responses.GetCategoriesResponse
-import com.example.foodappsyncit.network.responses.LoginResponse
-import com.example.foodappsyncit.network.responses.LogoutResponse
-import com.example.foodappsyncit.network.responses.UserRegistryResponse
+import com.example.foodappsyncit.network.responses.*
+import com.example.foodappsyncit.utils.Constants.Companion.ADD_FAVORITE_URL
+import com.example.foodappsyncit.utils.Constants.Companion.ALL_FAVORITES_URL
 import com.example.foodappsyncit.utils.Constants.Companion.CATEGORIES_URL
+import com.example.foodappsyncit.utils.Constants.Companion.DELETE_FAVORITE_PRODUCT_URL
 import com.example.foodappsyncit.utils.Constants.Companion.LOGGED_URL
 import com.example.foodappsyncit.utils.Constants.Companion.LOGIN_URL
 import com.example.foodappsyncit.utils.Constants.Companion.LOGOUT_URL
@@ -15,6 +15,7 @@ import com.example.foodappsyncit.utils.Constants.Companion.REGISTER_URL
 import com.example.foodappsyncit.utils.Constants.Companion.UPDATE_USER_URL
 import retrofit2.Response
 import retrofit2.http.*
+import java.security.interfaces.RSAKey
 
 interface FoodAppService {
     @GET(CATEGORIES_URL)
@@ -40,7 +41,7 @@ interface FoodAppService {
 
     @Headers("Accept:application/json")
     @POST(LOGOUT_URL)
-    suspend fun logoutUser(@Header("Authorization") token: String): Response<LogoutResponse>
+    suspend fun logoutUser(@Header("Authorization") token: String): Response<MessageResponse>
 
     @Headers(
         "Accept:application/json",
@@ -51,5 +52,23 @@ interface FoodAppService {
         @Header("Authorization") token: String,
         @Body user: UserUpdate
     ): Response<LoginResponse>
+
+    @Headers("Accept:application/json")
+    @GET(ALL_FAVORITES_URL)
+    suspend fun readAllFavorites(@Header("Authorization") token: String): Response<FavoriteProductsResponse>
+
+    @Headers("Accept:application/json")
+    @POST(ADD_FAVORITE_URL)
+    suspend fun addProductToFavorites(
+        @Header("Authorization") token: String,
+        @Path("productId") productId: Int
+    ): Response<MessageResponse>
+
+    @Headers("Accept:application/json")
+    @DELETE(DELETE_FAVORITE_PRODUCT_URL)
+    suspend fun deleteProductFromFavorites(
+        @Header("Authorization") token: String,
+        @Path("productId") productId: Int
+    ): Response<MessageResponse>
 
 }

@@ -16,6 +16,7 @@ import com.example.foodappsyncit.adapters.CategoryAdapter
 import com.example.foodappsyncit.adapters.ProductAdapter
 import com.example.foodappsyncit.models.Category
 import com.example.foodappsyncit.viewmodels.CategoryViewModel
+import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_menu.*
 import kotlinx.android.synthetic.main.fragment_menu.view.*
 

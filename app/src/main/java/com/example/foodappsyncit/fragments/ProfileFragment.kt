@@ -13,17 +13,16 @@ import com.example.foodappsyncit.R
 import com.example.foodappsyncit.adapters.FavoriteProductsAdapter
 import com.example.foodappsyncit.utils.UserPreferences
 import com.example.foodappsyncit.utils.ValidationUtil
-import com.example.foodappsyncit.viewmodels.ProductViewModel
 import com.example.foodappsyncit.viewmodels.UserLoginViewModel
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import android.view.WindowManager
 import android.widget.Toast
+import com.example.foodappsyncit.activities.MainActivity
 import com.example.foodappsyncit.network.requests.UserUpdate
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var productViewModel: ProductViewModel
     private lateinit var userViewModel: UserLoginViewModel
 
     private var firstName: String? = null
@@ -75,16 +74,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupProductObserver(view: View) {
-        productViewModel.readAllProducts.observe(viewLifecycleOwner, {
-            favoriteProductAdapter.setData(it)
-            if (it.isEmpty()) {
-                view.tvMyFavorites.visibility = View.GONE
-            }
-        })
+        favoriteProductAdapter.setData((activity as MainActivity).favoriteList)
+        if ((activity as MainActivity).favoriteList.isEmpty()) {
+            view.tvMyFavorites.visibility = View.GONE
+        }
     }
 
     private fun setupViewModels() {
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserLoginViewModel::class.java)
     }
 

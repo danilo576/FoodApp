@@ -6,7 +6,7 @@ import com.example.foodappsyncit.network.requests.LoginRequest
 import com.example.foodappsyncit.network.requests.UserUpdate
 import com.example.foodappsyncit.network.responses.GetCategoriesResponse
 import com.example.foodappsyncit.network.responses.LoginResponse
-import com.example.foodappsyncit.network.responses.LogoutResponse
+import com.example.foodappsyncit.network.responses.MessageResponse
 import com.example.foodappsyncit.network.responses.UserRegistryResponse
 import retrofit2.Response
 
@@ -30,7 +30,7 @@ class SharedRepository {
     suspend fun getLoggedInUser(token: String): Response<UserRegistryResponse> =
         NetworkLayer.apiClient.getLoggedInUser(token)
 
-    suspend fun logoutUser(token: String): Response<LogoutResponse> =
+    suspend fun logoutUser(token: String): Response<MessageResponse> =
         NetworkLayer.apiClient.logoutUser(token)
 
     suspend fun updateUser(
@@ -38,5 +38,4 @@ class SharedRepository {
         user: UserUpdate
     ): Response<LoginResponse> =
         NetworkLayer.apiClient.updateUser(token, user)
-
 }

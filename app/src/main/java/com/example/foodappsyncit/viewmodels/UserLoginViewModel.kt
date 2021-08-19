@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.foodappsyncit.network.requests.LoginRequest
 import com.example.foodappsyncit.network.requests.UserUpdate
 import com.example.foodappsyncit.network.responses.LoginResponse
-import com.example.foodappsyncit.network.responses.LogoutResponse
+import com.example.foodappsyncit.network.responses.MessageResponse
 import com.example.foodappsyncit.network.responses.UserRegistryResponse
 import com.example.foodappsyncit.repository.SharedRepository
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ class UserLoginViewModel() : ViewModel() {
     private val repository = SharedRepository()
     var loginResponse: MutableLiveData<Response<LoginResponse>> = MutableLiveData()
     var loggedInUser: MutableLiveData<Response<UserRegistryResponse>> = MutableLiveData()
-    var logoutUser: MutableLiveData<Response<LogoutResponse>> = MutableLiveData()
+    var logoutUser: MutableLiveData<Response<MessageResponse>> = MutableLiveData()
     var updatedUser: MutableLiveData<Response<LoginResponse>> = MutableLiveData()
 
     fun loginUser(user: LoginRequest) {

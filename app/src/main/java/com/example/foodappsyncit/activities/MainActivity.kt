@@ -5,18 +5,27 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.foodappsyncit.R
+import com.example.foodappsyncit.models.Product
+import com.example.foodappsyncit.utils.UserPreferences
+import com.example.foodappsyncit.viewmodels.ProductViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private var badgeCounter: Int = 0
 
+    lateinit var productViewModel: ProductViewModel
+    var favoriteList = ArrayList<Product>()
+
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -24,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         setContentView(R.layout.activity_main)
+        setupProductObserver()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -51,6 +61,21 @@ class MainActivity : AppCompatActivity() {
                 getOrCreateBadge(R.id.cartFragment).isVisible = false
             } else {
                 getOrCreateBadge(R.id.cartFragment).number = badgeCounter
+            }
+        }
+    }
+
+    private fun setupProductObserver() {
+
+        UserPreferences.retrieveToken(this, "token")?.let {
+            productViewModel.readAllFavorites("Bearer $it")
+        }
+
+        productViewModel.readAllFavoriteProducts.observe(this) { response ->
+            if (response.isSuccessful) {
+                favoriteList = response.body()?.favoriteProducts as ArrayList<Product>
+            } else {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -1,5 +1,5 @@
 package com.example.foodappsyncit.network.responses
 
-data class LogoutResponse(
+data class MessageResponse(
     val message: String = ""
 )

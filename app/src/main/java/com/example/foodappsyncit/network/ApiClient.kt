@@ -3,10 +3,7 @@ package com.example.foodappsyncit.network
 import com.example.foodappsyncit.models.User
 import com.example.foodappsyncit.network.requests.LoginRequest
 import com.example.foodappsyncit.network.requests.UserUpdate
-import com.example.foodappsyncit.network.responses.GetCategoriesResponse
-import com.example.foodappsyncit.network.responses.LoginResponse
-import com.example.foodappsyncit.network.responses.LogoutResponse
-import com.example.foodappsyncit.network.responses.UserRegistryResponse
+import com.example.foodappsyncit.network.responses.*
 import retrofit2.Response
 
 class ApiClient(
@@ -22,7 +19,7 @@ class ApiClient(
     suspend fun getLoggedInUser(token: String): Response<UserRegistryResponse> =
         foodAppService.getLoggedInUser(token)
 
-    suspend fun logoutUser(token: String): Response<LogoutResponse> =
+    suspend fun logoutUser(token: String): Response<MessageResponse> =
         foodAppService.logoutUser(token)
 
     suspend fun updateUser(
@@ -30,4 +27,19 @@ class ApiClient(
         user: UserUpdate
     ): Response<LoginResponse> =
         foodAppService.updateUser(token, user)
+
+    suspend fun readAllFavorites(token: String): Response<FavoriteProductsResponse> =
+        foodAppService.readAllFavorites(token)
+
+    suspend fun addProductToFavorites(
+        token: String,
+        productId: Int
+    ): Response<MessageResponse> =
+        foodAppService.addProductToFavorites(token, productId)
+
+    suspend fun deleteProductFromFavorites(
+        token: String,
+        productId: Int
+    ): Response<MessageResponse> =
+        foodAppService.deleteProductFromFavorites(token, productId)
 }

@@ -11,5 +11,8 @@ class Constants {
         const val LOGOUT_URL = "/api/logout"
         const val UPDATE_USER_URL = "/api/user/update"
         const val PREFS_NAME = "myPrefs"
+        const val ADD_FAVORITE_URL = "/api/addToFavorites/{productId}"
+        const val ALL_FAVORITES_URL = "/api/favoriteProducts"
+        const val DELETE_FAVORITE_PRODUCT_URL = "/api/removeFromFavorites/{productId}"
     }
 }

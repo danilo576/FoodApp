@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +20,7 @@ import com.example.foodappsyncit.adapters.ChooseSizeAdapter
 import com.example.foodappsyncit.adapters.ToppingAdapter
 import com.example.foodappsyncit.controllers.CartController
 import com.example.foodappsyncit.models.*
-import com.example.foodappsyncit.viewmodels.ProductViewModel
+import com.example.foodappsyncit.utils.UserPreferences
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlin.math.roundToInt
@@ -34,11 +33,6 @@ class DetailFragment : Fragment() {
     lateinit var valueToUpdate: TextView
     lateinit var btnAddToCart: Button
 
-    private val productViewModel: ProductViewModel by lazy {
-        ViewModelProvider(activity as MainActivity).get(ProductViewModel::class.java)
-    }
-
-    private var favoriteList = ArrayList<Product>()
     private lateinit var toppingAdapter: ToppingAdapter
     private var chooseSizeAdapter: ChooseSizeAdapter? = null
 
@@ -93,6 +87,12 @@ class DetailFragment : Fragment() {
             }
         }
 
+        if ((activity as MainActivity).favoriteList.contains(args.product)) {
+            view.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
+        } else {
+            view.ivFavorite.setImageResource(R.drawable.ic_favorite_outline)
+        }
+
         val nameOfMarker = when (args.product!!.markers.firstOrNull()) {
             "Hot" -> R.drawable.ic_hot
             "Veg" -> R.drawable.ic_veg
@@ -104,14 +104,21 @@ class DetailFragment : Fragment() {
             view.ivFavorite.visibility = View.GONE
         }
 
-        setupProductObserver(view)
-
         view.ivFavorite.setOnClickListener {
-            if (favoriteList.contains(args.product)) {
-                args.product?.let { product -> deleteProductFromDatabase(product) }
+            if ((activity as MainActivity).favoriteList.contains(args.product)) {
                 view.ivFavorite.setImageResource(R.drawable.ic_favorite_outline)
+                args.product?.let { product ->
+                    deleteProductFromFavorites(product)
+                    (activity as MainActivity).favoriteList.removeIf {
+                        it.id == product.id
+                    }
+                }
             } else {
-                args.product?.let { product -> addProductToDatabase(product) }
+                view.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
+                args.product?.let { product ->
+                    addProductToFavorites(product)
+                    (activity as MainActivity).favoriteList.add(product)
+                }
             }
 
         }
@@ -209,22 +216,34 @@ class DetailFragment : Fragment() {
         view?.recyclerViewTopping?.adapter = toppingAdapter
     }
 
-    private fun addProductToDatabase(product: Product) {
-        productViewModel.addProduct(product)
+    private fun addProductToFavorites(product: Product) {
+        UserPreferences.retrieveToken(requireContext(), "token")?.let {
+            (activity as MainActivity).productViewModel.addProductToFavorites(
+                "Bearer $it",
+                product.id
+            )
+        }
         Toast.makeText(
             requireContext(),
             "Product added in favorites",
             Toast.LENGTH_SHORT
         ).show()
+
     }
 
-    private fun deleteProductFromDatabase(product: Product) {
-        productViewModel.deleteProduct(product)
+    private fun deleteProductFromFavorites(product: Product) {
+        UserPreferences.retrieveToken(requireContext(), "token")?.let {
+            (activity as MainActivity).productViewModel.deleteProductFromFavorites(
+                "Bearer $it",
+                product.id
+            )
+        }
         Toast.makeText(
             requireContext(),
             "Successfully removed ${product.name} from favorite list",
             Toast.LENGTH_SHORT
         ).show()
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -267,14 +286,4 @@ class DetailFragment : Fragment() {
         return ((sum1 + sum2) * 100.0).roundToInt() / 100.0
     }
 
-    private fun setupProductObserver(view: View) {
-        productViewModel.readAllProducts.observe(viewLifecycleOwner, { response ->
-            if (response.contains(args.product)) {
-                view.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
-            } else {
-                view.ivFavorite.setImageResource(R.drawable.ic_favorite_outline)
-            }
-            favoriteList = response as ArrayList<Product>
-        })
-    }
 }

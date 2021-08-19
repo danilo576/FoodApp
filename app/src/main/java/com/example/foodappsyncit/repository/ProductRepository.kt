@@ -1,22 +1,24 @@
 package com.example.foodappsyncit.repository
 
-import androidx.lifecycle.LiveData
-import com.example.foodappsyncit.database.ProductDao
-import com.example.foodappsyncit.models.Product
+import com.example.foodappsyncit.network.NetworkLayer
+import com.example.foodappsyncit.network.responses.FavoriteProductsResponse
+import com.example.foodappsyncit.network.responses.MessageResponse
+import retrofit2.Response
 
-class ProductRepository(private val productDao: ProductDao) {
+class ProductRepository {
 
-    val readALlProducts: LiveData<List<Product>> = productDao.readALlProducts()
+    suspend fun readAllFavorites(token: String): Response<FavoriteProductsResponse> =
+        NetworkLayer.apiClient.readAllFavorites(token)
 
-    suspend fun addProduct(product: Product) {
-        productDao.addProduct(product)
-    }
+    suspend fun addProductToFavorites(
+        token: String,
+        productId: Int
+    ): Response<MessageResponse> =
+        NetworkLayer.apiClient.addProductToFavorites(token, productId)
 
-    suspend fun deleteProduct(product: Product) {
-        productDao.deleteProduct(product)
-    }
-
-    suspend fun deleteAllProducts() {
-        productDao.deleteAllProducts()
-    }
+    suspend fun deleteProductFromFavorites(
+        token: String,
+        productId: Int
+    ): Response<MessageResponse> =
+        NetworkLayer.apiClient.deleteProductFromFavorites(token, productId)
 }

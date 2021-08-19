@@ -14,14 +14,12 @@ import com.example.foodappsyncit.activities.MainActivity
 import com.example.foodappsyncit.controllers.CartController
 import com.example.foodappsyncit.utils.UserPreferences
 import com.example.foodappsyncit.utils.ValidationUtil
-import com.example.foodappsyncit.viewmodels.ProductViewModel
 import com.example.foodappsyncit.viewmodels.UserLoginViewModel
 import kotlinx.android.synthetic.main.fragment_more.view.*
 
 class MoreFragment : Fragment() {
 
     private lateinit var userViewModel: UserLoginViewModel
-    private lateinit var productViewModel: ProductViewModel
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -30,7 +28,6 @@ class MoreFragment : Fragment() {
     ): View? {
 
         userViewModel = ViewModelProvider(this).get(UserLoginViewModel::class.java)
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         val view = inflater.inflate(R.layout.fragment_more, container, false)
 
@@ -71,7 +68,6 @@ class MoreFragment : Fragment() {
                     startActivity(this)
                     activity?.finish()
                 }
-                productViewModel.deleteAllProducts()
                 CartController.cartList.clear()
                 requireContext().getSharedPreferences("myPrefs", 0).edit().clear().apply()
             } else {

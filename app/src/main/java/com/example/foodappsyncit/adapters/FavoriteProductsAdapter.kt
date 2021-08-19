@@ -22,7 +22,8 @@ class FavoriteProductsAdapter :
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             itemView.tvHeading.text = product.name
-            itemView.tvPrice.text = "$${product.price}"
+            itemView.tvPrice.text =
+                if (product.type == "simple") "$${product.price}" else "$${product.variants[0].price}"
             Picasso.get().load(product.image.replace("http:", "https:")).resize(300, 300)
                 .into(itemView.ivPicture)
 
@@ -37,7 +38,7 @@ class FavoriteProductsAdapter :
                 val action =
                     ProfileFragmentDirections.actionProfileFragmentToDetailFragment(
                         product,
-                        null,
+                        product.category_name,
                         null
                     )
                 itemView.findNavController().navigate(action)
