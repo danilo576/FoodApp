@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -29,19 +27,13 @@ class DetailFragment : Fragment() {
 
     private val args by navArgs<DetailFragmentArgs>()
 
-    lateinit var nameToUpdate: TextView
-    lateinit var valueToUpdate: TextView
-    lateinit var btnAddToCart: Button
-
     private lateinit var toppingAdapter: ToppingAdapter
     private var chooseSizeAdapter: ChooseSizeAdapter? = null
 
-    private var variantName = ""
-    private var variantValue = ""
-    private var variantPrice = 0.00
+    private var variant = Variant()
 
-    private var toppingPrice = 0.00
     private var selectedToppings = ArrayList<ToppingWrapper>()
+    private var toppingPrice = 0.00
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -51,18 +43,13 @@ class DetailFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_detail, container, false)
 
-        nameToUpdate = view.tvChooseName
-        valueToUpdate = view.tvChooseValue
-        btnAddToCart = view.btnAddToCart
-
         if (args.cartItem != null) {
             val index = CartController.cartList.indexOf(args.cartItem)
             selectedToppings = CartController.cartList[index].toppings
             selectedToppings.forEach {
                 toppingPrice += it.topping.price
             }
-            variantName = args.cartItem!!.variant.name
-            variantValue = args.cartItem!!.variant.value
+            variant = args.cartItem!!.variant
         }
 
         Picasso.get().load(args.product?.image?.replace("http:", "https:")).into(view.ivPizzaDetail)
@@ -72,18 +59,18 @@ class DetailFragment : Fragment() {
         initToppingRecyclerView(view)
 
         if (args.product?.type == "configurable") {
-            variantPrice = if (args.cartItem != null) {
+            variant.price = if (args.cartItem != null) {
                 args.cartItem!!.variant.price
             } else {
                 args.product!!.variants[0].price
             }
             initChooseSizeRecyclerView(view)
-            updateInitialUi()
+            updateInitialUi(view)
         } else {
             hideConfigurableUi(view)
             val price = args.product?.price
             if (price != null) {
-                btnAddToCart.text = "Add to cart for $${getTotalSum(price, toppingPrice)}"
+                view.btnAddToCart.text = "Add to cart for $${getTotalSum(price, toppingPrice)}"
             }
         }
 
@@ -126,21 +113,22 @@ class DetailFragment : Fragment() {
         view.btnAddToCart.setOnClickListener {
             var price =
                 if (args.product?.type == "configurable") getTotalSum(
-                    variantPrice,
+                    variant.price,
                     toppingPrice
                 ) else getTotalSum(args.product!!.price, toppingPrice)
 
-            if (variantName.isEmpty() && args.product?.type == "configurable") {
-                variantName = args.product!!.variants[0].name
-                variantValue = args.product!!.variants[0].value
+            if (variant.name.isEmpty() && args.product?.type == "configurable") {
+                variant.name = args.product!!.variants[0].name
+                variant.value = args.product!!.variants[0].value
                 price = args.product!!.variants[0].price
             }
 
+            // Check the destination where we came form, args.cartItem was the action from CartFragment
             if (args.cartItem != null) {
                 val index = CartController.cartList.indexOf(args.cartItem)
                 CartController.cartList[index] = CartItem(
                     args.product!!,
-                    Variant(variantName, variantValue, variantPrice),
+                    variant,
                     selectedToppings,
                     args.cartItem!!.categoryName,
                     price
@@ -151,7 +139,7 @@ class DetailFragment : Fragment() {
                 args.categoryName?.let { categoryName ->
                     CartItem(
                         args.product!!,
-                        Variant(variantName, variantValue, variantPrice),
+                        variant,
                         selectedToppings,
                         categoryName,
                         price
@@ -176,10 +164,8 @@ class DetailFragment : Fragment() {
 
         chooseSizeAdapter?.setOnClickListener((object : ChooseSizeAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                variantName = args.product!!.variants[position].name
-                variantValue = args.product!!.variants[position].value
-                variantPrice = args.product!!.variants[position].price
-                updateUi(position)
+                variant = args.product!!.variants[position]
+                updateUi(position, view)
             }
         }))
 
@@ -193,9 +179,9 @@ class DetailFragment : Fragment() {
                     selectedToppings.remove(ToppingWrapper(args.product!!.toppings[position], true))
                 }
                 if (args.product!!.type == "configurable") {
-                    updateButtonUi(variantPrice, toppingPrice)
+                    updateButtonUi(variant.price, toppingPrice, view)
                 } else {
-                    updateButtonUi(args.product!!.price, toppingPrice)
+                    updateButtonUi(args.product!!.price, toppingPrice, view)
                 }
             }
         }))
@@ -245,30 +231,30 @@ class DetailFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateUi(position: Int) {
-        nameToUpdate.text = args.product!!.variants[position].name
-        valueToUpdate.text = args.product!!.variants[position].value
-        btnAddToCart.text =
-            "Add to cart for $${((variantPrice + toppingPrice) * 100.0).roundToInt() / 100.0}"
+    private fun updateUi(position: Int, view: View) {
+        view.tvChooseName.text = args.product!!.variants[position].name
+        view.tvChooseValue.text = args.product!!.variants[position].value
+        view.btnAddToCart.text =
+            "Add to cart for $${((variant.price + toppingPrice) * 100.0).roundToInt() / 100.0}"
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateButtonUi(sum1: Double, sum2: Double) {
-        btnAddToCart.text =
+    private fun updateButtonUi(sum1: Double, sum2: Double, view: View) {
+        view.btnAddToCart.text =
             "Add to cart for $${((sum1 + sum2) * 100.0).roundToInt() / 100.0}"
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateInitialUi() {
-        nameToUpdate.text =
+    private fun updateInitialUi(view: View) {
+        view.tvChooseName.text =
             if (args.cartItem != null) args.cartItem!!.variant.name else args.product!!.variants[0].name
-        valueToUpdate.text =
+        view.tvChooseValue.text =
             if (args.cartItem != null) args.cartItem!!.variant.value else args.product!!.variants[0].value
 
         val price =
             if (args.cartItem != null) args.cartItem!!.price else args.product!!.variants[0].price
 
-        btnAddToCart.text = "Add to cart for $${price}"
+        view.btnAddToCart.text = "Add to cart for $${price}"
 
     }
 

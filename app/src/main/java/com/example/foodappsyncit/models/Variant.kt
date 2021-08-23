@@ -1,7 +1,7 @@
 package com.example.foodappsyncit.models
 
 data class Variant(
-    val name: String = "",
-    val value: String = "",
-    val price: Double = 0.00
+    var name: String = "",
+    var value: String = "",
+    var price: Double = 0.00
 )
