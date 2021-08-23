@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,15 +15,16 @@ import com.example.foodappsyncit.activities.MainActivity
 import com.example.foodappsyncit.adapters.CategoryAdapter
 import com.example.foodappsyncit.adapters.ProductAdapter
 import com.example.foodappsyncit.models.Category
+import com.example.foodappsyncit.network.responses.GetCategoriesResponse
+import com.example.foodappsyncit.utils.ScreenState
 import com.example.foodappsyncit.viewmodels.CategoryViewModel
-import kotlinx.android.synthetic.main.fragment_detail.view.*
-import kotlinx.android.synthetic.main.fragment_menu.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_menu.view.*
 
 class MenuFragment : Fragment() {
 
-    private val viewModelMenu: CategoryViewModel by lazy {
-        ViewModelProvider(activity as MainActivity).get(CategoryViewModel::class.java)
+    private val categoryViewModel: CategoryViewModel by lazy {
+        ViewModelProvider(activity as MainActivity)[CategoryViewModel::class.java]
     }
 
     private var selectedCategory: Category? = null
@@ -39,36 +40,12 @@ class MenuFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
 
+        categoryViewModel.categoriesLiveData.observe(viewLifecycleOwner, { state ->
+            processCategoryResponse(state, view)
+        })
+
         initCategoryRecyclerView(view)
         initProductRecyclerView(view)
-
-        getCategories()
-
-        categoryAdapter.setOnClickListener((object : CategoryAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                selectedCategory = categoryList[position]
-                productAdapter.setData(categoryList[position].products)
-
-            }
-        }))
-
-        productAdapter.setOnClickListener(object : ProductAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val product = selectedCategory?.products?.get(position)
-                val action = product?.let {
-                    selectedCategory?.name?.let { categoryName ->
-                        MenuFragmentDirections.actionMenuFragmentToDetailFragment(
-                            it,
-                            categoryName,
-                            null
-                        )
-                    }
-                }
-                if (action != null) {
-                    findNavController().navigate(action)
-                }
-            }
-        })
 
         return view
     }
@@ -94,29 +71,67 @@ class MenuFragment : Fragment() {
         view.recyclerViewCategories.adapter = categoryAdapter
     }
 
-    private fun getCategories() {
-        viewModelMenu.refreshCategories()
-        viewModelMenu.categoriesLiveData.observe(viewLifecycleOwner) { response ->
-            if (response == null) {
-                Toast.makeText(
-                    activity as MainActivity,
-                    "Unsuccessful network call!",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@observe
-            } else {
-                categoryList = response.categories as ArrayList<Category>
+    private fun processCategoryResponse(state: ScreenState<GetCategoriesResponse?>, view: View) {
+        val progressBar = activity?.findViewById<ProgressBar>(R.id.progressBar)
+        when (state) {
+            is ScreenState.Loading -> {
+                progressBar?.visibility = View.VISIBLE
+            }
+            is ScreenState.Success -> {
+                progressBar?.visibility = View.GONE
 
-                if (selectedCategory != null) {
-                    val index = categoryList.indexOf(selectedCategory)
-                    categoryAdapter.setData(response.categories, index)
-                } else {
-                    selectedCategory = categoryList.first()
-                    categoryAdapter.setData(response.categories, 0)
+                if (state.data != null) {
+
+                    categoryList = state.data.categories as ArrayList<Category>
+
+                    if (selectedCategory != null) {
+                        val index = categoryList.indexOf(selectedCategory)
+                        categoryAdapter.setData(state.data.categories, index)
+                    } else {
+                        selectedCategory = categoryList.first()
+                        categoryAdapter.setData(state.data.categories, 0)
+                    }
+
+                    selectedCategory?.let {
+                        productAdapter.setData(it.products)
+                    }
+
+                    categoryAdapter.setOnClickListener((object :
+                        CategoryAdapter.OnItemClickListener {
+                        override fun onItemClick(position: Int) {
+                            selectedCategory = categoryList[position]
+                            productAdapter.setData(categoryList[position].products)
+
+                        }
+                    }))
+
+                    productAdapter.setOnClickListener(object : ProductAdapter.OnItemClickListener {
+                        override fun onItemClick(position: Int) {
+                            val product = selectedCategory?.products?.get(position)
+                            val action = product?.let {
+                                selectedCategory?.name?.let { categoryName ->
+                                    MenuFragmentDirections.actionMenuFragmentToDetailFragment(
+                                        it,
+                                        categoryName,
+                                        null
+                                    )
+                                }
+                            }
+                            if (action != null) {
+                                findNavController().navigate(action)
+                            }
+                        }
+                    })
                 }
-
-                selectedCategory?.let {
-                    productAdapter.setData(it.products)
+            }
+            is ScreenState.Error -> {
+                progressBar?.visibility = View.GONE
+                progressBar?.rootView?.let {
+                    Snackbar.make(
+                        it,
+                        state.message!!,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
         }
