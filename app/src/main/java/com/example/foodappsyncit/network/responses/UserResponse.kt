@@ -2,8 +2,8 @@ package com.example.foodappsyncit.network.responses
 
 data class UserResponse(
     val id: Int = 0,
-    val firstName: String = "",
-    val lastName: String = "",
+    var firstName: String = "",
+    var lastName: String = "",
     val email: String = "",
     val password: String = "",
     val status: String? = "",

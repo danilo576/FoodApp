@@ -6,29 +6,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodappsyncit.R
+import com.example.foodappsyncit.activities.MainActivity
 import com.example.foodappsyncit.adapters.FavoriteProductsAdapter
+import com.example.foodappsyncit.network.requests.UserUpdate
+import com.example.foodappsyncit.network.responses.UserResponse
 import com.example.foodappsyncit.utils.UserPreferences
 import com.example.foodappsyncit.utils.ValidationUtil
 import com.example.foodappsyncit.viewmodels.UserLoginViewModel
-import kotlinx.android.synthetic.main.fragment_profile.view.*
-import android.view.WindowManager
-import android.widget.Toast
-import com.example.foodappsyncit.activities.MainActivity
-import com.example.foodappsyncit.network.requests.UserUpdate
 import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
+
+enum class UserInfo() {
+    FIRST_NAME,
+    LAST_NAME,
+    PHONE_NUMBER
+}
 
 class ProfileFragment : Fragment() {
 
     private lateinit var userViewModel: UserLoginViewModel
 
-    private var firstName: String? = null
-    private var lastName: String? = null
-    private var phoneNumber: String? = null
     private lateinit var favoriteProductAdapter: FavoriteProductsAdapter
+
+    private var user: UserResponse? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -41,24 +47,24 @@ class ProfileFragment : Fragment() {
 
         setupFavoriteProductsRecyclerView(view)
 
-        setupProductObserver(view)
-
         findUserByToken()
 
         setupLoggedInUserObserver(view)
 
+        setupProductObserver(view)
+
         setupUpdateUserObserver(view)
 
         view.btnUpdateFirstName.setOnClickListener {
-            updateUser("First Name", firstName)
+            updateUser(UserInfo.FIRST_NAME, user?.firstName)
         }
 
         view.btnUpdateLastName.setOnClickListener {
-            updateUser("Last Name", lastName)
+            updateUser(UserInfo.LAST_NAME, user?.lastName)
         }
 
         view.btnUpdatePhoneNumber.setOnClickListener {
-            updateUser("Phone Number", phoneNumber)
+            updateUser(UserInfo.PHONE_NUMBER, user?.phone?.phoneNumber)
         }
 
         return view
@@ -81,7 +87,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupViewModels() {
-        userViewModel = ViewModelProvider(this).get(UserLoginViewModel::class.java)
+        userViewModel = ViewModelProvider(this)[UserLoginViewModel::class.java]
     }
 
     private fun findUserByToken() {
@@ -93,13 +99,11 @@ class ProfileFragment : Fragment() {
     private fun setupLoggedInUserObserver(view: View) {
         userViewModel.loggedInUser.observe(viewLifecycleOwner) {
             if (it.isSuccessful) {
+                user = it.body()?.user
                 view.tvFirstName.text = it.body()?.user?.firstName
-                firstName = it.body()?.user?.firstName.toString()
                 view.tvLastName.text = it.body()?.user?.lastName
-                lastName = it.body()?.user?.lastName.toString()
                 view.tvEmail.text = it.body()?.user?.email
                 view.tvPhone.text = it.body()?.user?.phone?.phoneNumber
-                phoneNumber = it.body()?.user?.phone?.phoneNumber.toString()
             } else {
                 ValidationUtil.showToast(requireContext(), "Something went wrong")
             }
@@ -113,9 +117,9 @@ class ProfileFragment : Fragment() {
                 view.tvFirstName.text = it.body()?.user?.firstName
                 view.tvLastName.text = it.body()?.user?.lastName
                 view.tvPhone.text = it.body()?.user?.phone?.phoneNumber
-                firstName = it.body()?.user?.firstName.toString()
-                lastName = it.body()?.user?.lastName.toString()
-                phoneNumber = it.body()?.user?.phone?.phoneNumber.toString()
+                user?.firstName = it.body()?.user?.firstName.toString()
+                user?.lastName = it.body()?.user?.lastName.toString()
+                user?.phone?.phoneNumber = it.body()?.user?.phone?.phoneNumber.toString()
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -126,10 +130,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun updateUser(heading: String, etHeading: String?) {
+    private fun updateUser(heading: UserInfo, userInfo: String?) {
         val view = View.inflate(requireContext(), R.layout.custom_dialog, null)
-        view.tvHeadingDialog.text = heading
-        view.etHeadingDialog.setText(etHeading)
+        view.tvHeadingDialog.text = when (heading) {
+            UserInfo.FIRST_NAME -> "First Name"
+            UserInfo.LAST_NAME -> "Last Name"
+            else -> "Phone Number"
+        }
+        view.etHeadingDialog.setText(userInfo)
         val builder = AlertDialog.Builder(requireContext())
         builder.setView(view)
         val dialog = builder.create()
@@ -143,9 +151,9 @@ class ProfileFragment : Fragment() {
             UserPreferences.retrieveToken("token")?.let {
 
                 userViewModel.updateUser(
-                    when (heading) {
-                        "First Name" -> UserUpdate(firstName = view.etHeadingDialog.text.toString())
-                        "Last Name" -> UserUpdate(
+                    when (heading.toString()) {
+                        "FIRST_NAME" -> UserUpdate(firstName = view.etHeadingDialog.text.toString())
+                        "LAST_NAME" -> UserUpdate(
                             lastName = view.etHeadingDialog.text.toString()
                         )
                         else -> UserUpdate(phoneNumber = view.etHeadingDialog.text.toString())
