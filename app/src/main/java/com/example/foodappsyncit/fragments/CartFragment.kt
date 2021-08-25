@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -39,29 +39,7 @@ class CartFragment : Fragment() {
 
         initCartRecyclerView()
 
-        class MyClass : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                cartAdapter.deleteItem(viewHolder.absoluteAdapterPosition)
-
-                if (CartController.cartList.isEmpty()) {
-                    emptyCartUi()
-                    (activity as MainActivity).incrementBadge("empty")
-                } else {
-                    updateUi()
-                    (activity as MainActivity).incrementBadge("-")
-                }
-            }
-        }
-
-        ItemTouchHelper(MyClass()).attachToRecyclerView(recyclerViewCart)
+        initSwipeToDelete()
 
         if (CartController.cartList.isEmpty()) {
             emptyCartUi()
@@ -104,6 +82,33 @@ class CartFragment : Fragment() {
             }
         }))
 
+    }
+
+    private fun initSwipeToDelete() {
+
+        class MyClass : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                cartAdapter.deleteItem(viewHolder.absoluteAdapterPosition)
+
+                if (CartController.cartList.isEmpty()) {
+                    emptyCartUi()
+                    (activity as MainActivity).incrementBadge("empty")
+                } else {
+                    updateUi()
+                    (activity as MainActivity).incrementBadge("-")
+                }
+            }
+        }
+
+        ItemTouchHelper(MyClass()).attachToRecyclerView(recyclerViewCart)
     }
 
     @SuppressLint("SetTextI18n")
