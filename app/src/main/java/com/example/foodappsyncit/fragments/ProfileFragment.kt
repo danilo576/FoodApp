@@ -68,6 +68,23 @@ class ProfileFragment : Fragment() {
             updateUser(UserInfo.PHONE_NUMBER, user?.phone?.phoneNumber)
         }
 
+        favoriteProductAdapter.setOnClickListener(object :
+            FavoriteProductsAdapter.OnItemClickListener {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onItemLongClick(): Boolean {
+                return true
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onItemClickListener(productId: Int, position: Int) {
+                (activity as MainActivity).favoriteList.removeIf {
+                    it.id == productId
+                }
+                favoriteProductAdapter.notifyItemRemoved(position)
+                (activity as MainActivity).productViewModel.deleteProductFromFavorites(productId)
+            }
+        })
+
         return view
     }
 

@@ -70,4 +70,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end">
+
+        <ImageView
+            android:id="@+id/btnCancelProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_cancel"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
 </androidx.cardview.widget.CardView>

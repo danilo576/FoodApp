@@ -17,10 +17,21 @@ class FavoriteProductsAdapter :
 
     private var favoriteList = emptyList<Product>()
 
+    private var mListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemLongClick(): Boolean
+        fun onItemClickListener(productId: Int, position: Int)
+    }
+
+    fun setOnClickListener(listener: OnItemClickListener) {
+        mListener = listener
+    }
+
     inner class FavoriteProductsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(product: Product) {
+        fun bind(product: Product, position: Int) {
             itemView.tvHeading.text = product.name
             itemView.tvPrice.text =
                 if (product.type == "simple") "$${product.price}" else "$${product.variants[0].price}"
@@ -43,6 +54,15 @@ class FavoriteProductsAdapter :
                     )
                 itemView.findNavController().navigate(action)
             }
+
+            itemView.btnCancelProfile.setOnClickListener {
+                mListener?.onItemClickListener(product.id, position)
+            }
+
+            itemView.rowLayout.setOnLongClickListener {
+                it.btnCancelProfile.visibility = View.VISIBLE
+                mListener?.onItemLongClick()!!
+            }
         }
     }
 
@@ -61,7 +81,7 @@ class FavoriteProductsAdapter :
         holder: FavoriteProductsAdapter.FavoriteProductsViewHolder,
         position: Int
     ) {
-        holder.bind(favoriteList[position])
+        holder.bind(favoriteList[position], position)
     }
 
     @SuppressLint("NotifyDataSetChanged")
