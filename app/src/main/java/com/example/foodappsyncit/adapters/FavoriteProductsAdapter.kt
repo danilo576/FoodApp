@@ -56,7 +56,15 @@ class FavoriteProductsAdapter :
             }
 
             itemView.btnCancelProfile.setOnClickListener {
-                mListener?.onItemClickListener(product.id, position)
+                itemView.rowLayout.animate().apply {
+                    scaleX(0f)
+                    scaleY(0f)
+                    alpha(0f)
+                    duration = 1000
+                    withEndAction {
+                        mListener?.onItemClickListener(product.id, position)
+                    }
+                }
             }
 
             itemView.rowLayout.setOnLongClickListener {

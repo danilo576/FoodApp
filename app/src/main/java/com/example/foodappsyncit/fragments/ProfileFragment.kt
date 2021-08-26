@@ -21,7 +21,7 @@ import com.example.foodappsyncit.viewmodels.UserLoginViewModel
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
-enum class UserInfo() {
+enum class UserInfo {
     FIRST_NAME,
     LAST_NAME,
     PHONE_NUMBER
