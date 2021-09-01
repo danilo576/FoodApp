@@ -3,6 +3,7 @@ package com.example.foodappsyncit.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,9 +38,16 @@ class MoreFragment : Fragment() {
             setupLogout(view)
         }
 
+        view.settingsContainer.setOnClickListener {
+            Intent(android.provider.Settings.ACTION_SETTINGS).also {
+                startActivity(it)
+            }
+        }
+
         return view
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupLogin(view: View) {
         view.ivLogout.setImageResource(R.drawable.ic_login)
         view.tvLogout.text = "Login"
